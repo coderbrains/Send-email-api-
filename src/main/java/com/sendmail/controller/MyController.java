@@ -20,34 +20,26 @@ public class MyController {
 
 	@Autowired
 	private EmailService emailService;
-	
-	
+
 	@PostMapping("/demo")
 	public String demo() {
 		return "demo api";
 	}
-	
+
 	@CrossOrigin
 	@PostMapping("/sendemail")
-	
-	public ResponseEntity<Object> sendMail(@RequestBody EmailStructure emailStructure)
-	{
+
+	public ResponseModel sendMail(@RequestBody EmailStructure emailStructure) {
 //		boolean sendMail = emailService.sendMail(emailStructure.getTo(), emailStructure.getSubject(), emailStructure.getMessage());
-		
-		boolean sendMail = emailService.sendAttachedEmail(emailStructure.getTo(), emailStructure.getSubject(), emailStructure.getMessage());
-		
-		
-		
-		if(sendMail) {
-			return ResponseEntity.status(HttpStatus.ACCEPTED).body("sent successfully");
+
+		boolean sendMail = emailService.sendAttachedEmail(emailStructure.getTo(), emailStructure.getSubject(),
+				emailStructure.getMessage());
+
+		if (sendMail) {
+			return new ResponseModel(0, "sent successfully");
 		}
-		
-		
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR
-				).body("email canot be sent...");
-		
-		
-		
+
+		return new ResponseModel(3, "cannot sent message...");
 	}
-	
+
 }
